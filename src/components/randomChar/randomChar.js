@@ -29,28 +29,19 @@ export default class RandomChar extends Component {
 
     gotService = new GotService();
     state = {
-        name: null,
-        gender: null,
-        born: null,
-        died: null,
-        culture: null
+        char: {}
+    };
+    
+    onCharLoaded = (char) => {
+        this.setState({char});
     }
-
     updateChar() {
-        const id = 135;
+        const id = Math.floor(Math.random() * 475 + 25);
         this.gotService.getCharacter(id)
-        .then((char) => {
-            this.setState({
-                name: char.name,
-                gender: char.gender,
-                born: char.born,
-                died: char.died,
-                culture: char.culture
-            })
-        });
+        .then(this.onCharLoaded);
     }
     render() {
-        const {name, gender, born, died, culture} = this.state;
+        const { char: { name, gender, born, died, culture }} = this.state;
         return (
             <RandomBlock className="rounded">
             <RandomCharTitle>Random Character: {name}</RandomCharTitle>
