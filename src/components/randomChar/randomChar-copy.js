@@ -45,10 +45,12 @@ export default class RandomChar extends Component {
             .then(this.onCharLoaded);
     }
     render() {
-        const {char, loading} = this.state;
+        const {char, loading, error} = this.state;
+        const errorMessage = error ? <ErrorMessage/> : null;
         const content = loading ? <Spinner/> : <View char={char}/>;
         return (
             <RandomBlock className="rounded">
+                {errorMessage}
                 {content}
             </RandomBlock>
         );

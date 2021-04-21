@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import GotService from '../../services/gotService';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
-// import Spinner from '../spinner/spinner'; 
+import Spinner from '../spinner/spinner'; 
+import ErrorMessage from '../errorMessage/errorMessage';
+import { render } from 'react-dom';
+
 
 
 const RandomBlock = styled.div`
@@ -29,21 +32,50 @@ export default class RandomChar extends Component {
 
     gotService = new GotService();
     state = {
-        char: {}
+        char: {},
+        loading: true,
+        error: false
     };
     
     onCharLoaded = (char) => {
-        this.setState({char});
+        this.setState({
+            char,
+            loading: false
+        });
+    }
+    onError = (err) => {
+        this.setState({
+            error: true,
+            loading: false
+        })
     }
     updateChar() {
-        const id = Math.floor(Math.random() * 475 + 25);
+        // const id = Math.floor(Math.random() * 475 + 25);
+        const id = 150000;
         this.gotService.getCharacter(id)
-        .then(this.onCharLoaded);
+        .then(this.onCharLoaded)
+        .catch(this.onError)
     }
     render() {
-        const { char: { name, gender, born, died, culture }} = this.state;
+        const { char, loading, error} = this.state;
+        const errorMessage = error ? <ErrorMessage/> : null;
+        const spinner = loading ? <Spinner/> : null;
+        const component = !(loading || error) ? <View char={char}/> : null;
+
         return (
             <RandomBlock className="rounded">
+                {spinner}
+                {errorMessage}
+                {component}
+            </RandomBlock>
+        );
+    }
+}
+
+const View = ({char}) => {
+    const { name, gender, born, died, culture } = char;
+        return(
+            <>
             <RandomCharTitle>Random Character: {name}</RandomCharTitle>
             <ListGroup className="list-group-flush">
                 <ListGroupItem className="d-flex justify-content-between">
@@ -63,7 +95,6 @@ export default class RandomChar extends Component {
                     <span>{culture}</span>
                 </ListGroupItem>
             </ListGroup>
-            </RandomBlock>
-        );
-    }
+        </>
+    )
 }

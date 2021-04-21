@@ -26,6 +26,12 @@ export default class GotService {
     }
     async getCharacter(id) {
         const character = await this.getResource(`/characters/${id}`);
+        const keys = Object.keys(character);
+        keys.forEach(key => {
+            if (character[key] === '') {
+                character[key] = 'Missing data';
+            }
+        })
         return this._transformCharacter(character);
     }
     async getAllHouses() {
