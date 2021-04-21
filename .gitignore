@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/services/gotService-copy.js
+/randomChar/randomChar-copy.js
 
 # testing
 /coverage

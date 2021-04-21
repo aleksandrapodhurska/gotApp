@@ -18,3 +18,10 @@ a:active {
     text-decoration: none;
     color: inherit;
 }
+
+/* from CharDetails */
+.select-error {
+    color: #fff;
+    text-align: center;
+    font-size: 26px;
+}
