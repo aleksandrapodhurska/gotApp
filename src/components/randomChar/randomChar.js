@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import gotService from '../../services/gotService';
+import GotService from '../../services/gotService';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
-import Spinner from '../spinner/spinner'; 
+// import Spinner from '../spinner/spinner'; 
 
 
 const RandomBlock = styled.div`
@@ -22,27 +22,54 @@ const Term = styled.span`
 `;
 
 export default class RandomChar extends Component {
- 
+    constructor() {
+        super();
+        this.updateChar();
+    }
+
+    gotService = new GotService();
+    state = {
+        name: null,
+        gender: null,
+        born: null,
+        died: null,
+        culture: null
+    }
+
+    updateChar() {
+        const id = 135;
+        this.gotService.getCharacter(id)
+        .then((char) => {
+            this.setState({
+                name: char.name,
+                gender: char.gender,
+                born: char.born,
+                died: char.died,
+                culture: char.culture
+            })
+        });
+    }
     render() {
+        const {name, gender, born, died, culture} = this.state;
         return (
             <RandomBlock className="rounded">
-                        <RandomCharTitle>Random Character: Name</RandomCharTitle>
+            <RandomCharTitle>Random Character: {name}</RandomCharTitle>
             <ListGroup className="list-group-flush">
                 <ListGroupItem className="d-flex justify-content-between">
                     <Term>Gender </Term>
-                    <span>gender</span>
+                    <span>{gender}</span>
                 </ListGroupItem>
                 <ListGroupItem className="d-flex justify-content-between">
                     <Term>Born </Term>
-                    <span>born</span>
+                    <span>{born}</span>
                 </ListGroupItem>
                 <ListGroupItem className="d-flex justify-content-between">
                     <Term>Died </Term>
-                    <span>died</span>
+                    <span>{died}</span>
                 </ListGroupItem>
                 <ListGroupItem className="d-flex justify-content-between">
                     <Term>Culture </Term>
-                    <span>culture</span>
+                    <span>{culture}</span>
                 </ListGroupItem>
             </ListGroup>
             </RandomBlock>

@@ -12,11 +12,30 @@ export default class GotService {
         }
         return await res.json();
     }
+    getAllBooks() {
+        return this.getResource(`/books`);
+    }
+    
+    getBook(id) {
+        return this.getResource(`/books/${id}`);
+    }
     getAllCharacters() {
         return this.getResource(`/characters?page=5&pageSize=10`);
     }
     
-    getCharacter (id) {
+    getCharacter(id) {
         return this.getResource(`/characters/${id}`);
     }
+    getAllHouses() {
+        return this.getResource(`/houses`);
+    }
+    
+    getHouse (id) {
+        return this.getResource(`/houses/${id}`);
+    }
 }
+
+// const gotNew = new GotService();
+
+// gotNew.getHouse(3)
+// .then(res => console.log(res));
