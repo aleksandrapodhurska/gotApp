@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
+import GotService from '../../services/gotService';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList/itemList';
-import CharDetails from '../charDetails';
+import {CharacterPage, BooksPage, HousesPage} from '../pages';
 import Button from 'reactstrap/lib/Button';
 
-
 export default class App extends Component {
+    gotService = new GotService();
     state = {
         showRandomChar: true,
-        selectedChar: null
+        error: false
     }
 
     onToggleShow = () => {
@@ -21,14 +21,10 @@ export default class App extends Component {
         })
     }
 
-    onCharSelected = (id) => {
-        this.setState({
-            selectedChar: id
-        });
-    }
-
     render() {
         const randomCharShow = this.state.showRandomChar ? <RandomChar/> : null;
+
+
         return (
             <> 
                 <Container>
@@ -46,14 +42,9 @@ export default class App extends Component {
                             {randomCharShow}
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList onCharSelected={this.onCharSelected}/>
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails charId={this.state.selectedChar}/>
-                        </Col>
-                    </Row>
+                    <CharacterPage/>
+                    <BooksPage/>
+                    <HousesPage/>
                 </Container>
             </>
         );

@@ -1,45 +1,67 @@
 import React, {Component} from 'react';
-import { render } from 'react-dom';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import GotService from '../../services/gotService';
 import Spinner from '../spinner/spinner'; 
+import ErrorMessage from '../errorMessage/errorMessage';
 
 export default class ItemList extends Component {
-    gotService = new GotService();
-
     state = {
-        charList: null
+        itemList: null,
+        error: false
+    }
+
+    componentDidCatch() {
+        console.log('error');
+        this.setState({
+            error: true,
+            itemList: null
+        })
     }
 
     componentDidMount() {
-        this.gotService.getAllCharacters()
-        .then((charList) => {
+        const {getData} = this.props;
+
+        getData()
+        .then((itemList) => {
             this.setState({
-                charList
+                itemList
             })
+        })
+        .catch( () => this.onError())
+    }
+
+    onError(err) {
+        this.setState({
+            error: true,
+            itemList: null
         })
     }
 
     renderItems(arr) {
-        return arr.map((item, i) => {
+        return arr.map((item) => {
+            const {id} = item;
+            const label = this.props.renderItem(item);
             return (
                 <ListGroupItem
-                    key={i}
-                    onClick={() => this.props.onCharSelected(71 + i)}
+                    key={id}
+                    onClick={() => this.props.onItemSelected(id)}
                     href="#" tag="a">
-                    {item.name}
+                    {label}
                 </ListGroupItem>
             )
         })
     }
 
     render() {
-        const {charList} = this.state;
-        if(!charList) {
+        const {itemList, error} = this.state;
+        if(!itemList) {
             return <Spinner/>
         }
 
-        const items = this.renderItems(charList);
+        if(error) {
+            return <ErrorMessage/>
+        }
+
+        const items = this.renderItems(itemList);
 
         return (
             <ListGroup>
